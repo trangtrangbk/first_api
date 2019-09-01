@@ -19,7 +19,7 @@ getConnection = ()=>{
    return pool
   }
   router.get("/users",(req,res)=>{
-    const queryString = "SELECT * FROM friends"
+    const queryString = "SELECT * FROM users"
     getConnection().query(queryString,(err,rows,fields)=>{
       if(err){
         res.sendStatus(500)
