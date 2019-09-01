@@ -10,10 +10,10 @@ router.use(bodyParser.json())
 
 const pool = mysql.createPool({
     connectionLimit:10,
-    host : "localhost",
-    user : "root",
-    // password : ''
-    database : "myfriends"
+    host : "us-cdbr-iron-east-05.cleardb.net",
+    user : "be2f3c03346203",
+    password : 'c7ddee7e',
+    database : "heroku_fbde893619fc9a4"
 })
 getConnection = ()=>{
    return pool
