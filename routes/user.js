@@ -71,6 +71,7 @@ client.connect()
   })
   router.get("/",(req,res)=>{
    res.send("HEllo")
+   res.end()
   })
 
 module.exports = router 
