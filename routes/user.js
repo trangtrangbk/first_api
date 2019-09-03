@@ -16,11 +16,18 @@ router.use(bodyParser.json())
 //   password: 'Thunder@123',
 //   port: 5432,
 // })
+// const client = new Client({
+//   user: 'postgres',
+//   host: 'localhost',
+//   database: 'demo',
+//   password: 'Thunder@123',
+//   port: 5432,
+// })
 const client = new Client({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'demo',
-  password: 'Thunder@123',
+  user: 'uwwisdxwjqssvd',
+  host: 'ec2-54-83-9-169.compute-1.amazonaws.com',
+  database: 'd4p089bh5985im',
+  password: '336dde9b13e93621719f958cfc0ee8947116d01080259927adb06df6ef2649de',
   port: 5432,
 })
 client.connect()
