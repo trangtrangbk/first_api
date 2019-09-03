@@ -1,61 +1,64 @@
 // will contain all of user related routes
 
 const express = require('express')
-const mysql = require('mysql')
+// const mysql = require('mysql')
+const {Pool, Client} = require('pg')
 const bodyParser = require('body-parser')
 const router = express.Router()
 
 router.use(bodyParser.urlencoded({extended : false}))
 router.use(bodyParser.json())
 
-const pool = mysql.createPool({
-    connectionLimit:10,
-    host : "us-cdbr-iron-east-05.cleardb.net",
-    user : "be2f3c03346203",
-    password : 'c7ddee7e',
-    database : "heroku_fbde893619fc9a4"
+// const pool = new Pool({
+//   user: 'postgres',
+//   host: 'localhost',
+//   database: 'demo',
+//   password: 'Thunder@123',
+//   port: 5432,
+// })
+const client = new Client({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'demo',
+  password: 'Thunder@123',
+  port: 5432,
 })
-getConnection = ()=>{
-   return pool
-  }
+client.connect()
+
   router.get("/users",(req,res)=>{
     const queryString = "SELECT * FROM users"
-    getConnection().query(queryString,(err,rows,fields)=>{
+    client.query(queryString,(err,result,fields)=>{
       if(err){
         res.sendStatus(500)
         res.end()
       }
-      res.json(rows)
+      res.json(result.rows)
       res.end()
     })
   })
   router.get("/user/:id",(req,res)=>{
     const userId = req.params.id
-    const queryString = "SELECT * FROM friends WHERE fid = ?"
-    getConnection().query(queryString,[userId],(err,rows,fields)=>{
+    console.log(userId)
+    const queryString = "SELECT * FROM users WHERE id = $1"
+    client.query(queryString,[userId],(err,result,fields)=>{
       if(err){
+        console.log(err)
         res.sendStatus(500)
         res.end()
         return
       }
-      // const users = rows.map((rows)=>{
-      //   return res.json({fid : rows.fid})
-      // })
-      res.json(rows)
+      res.json(result.rows)
     })
   })
   router.post("/user",(req,res)=>{
     const user = {
-      fname: req.body.fname,
-      preview : req.body.preview,
-      detail: req.body.detail,
-      fl_id: req.body.fl_id,
-      date_create : req.body.date_create,
-      count_number : req.body.count_number,
-      picture: req.body.picture
+      id : req.body.id,
+      name: req.body.name,
+      age : req.body.age,
+      gender: req.body.gender    
     }
-    const queryString = "INSERT INTO friends(fname,preview,detail,fl_id,date_create,count_number,picture) VALUES(?,?,?,?,?,?,?)"
-    getConnection().query(queryString,[user.fname,user.preview,user.detail,user.fl_id,user.date_create,user.count_number,user.picture],(err,results,fields)=>{
+    const queryString = "INSERT INTO users(id,name,age,gender) VALUES($1,$2,$3,$4)"
+    client.query(queryString,[user.id,user.name,user.age,user.gender],(err,results,fields)=>{
       if(err){
         console.log(err)
         res.sendStatus(500)
